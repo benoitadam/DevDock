@@ -1,0 +1,60 @@
+name: n8n
+
+networks:
+  default:
+    name: web
+    external: true
+
+services:
+  n8n:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+      args:
+        N8N_VERSION: latest
+    restart: unless-stopped
+    container_name: n8n
+    environment:
+      - N8N_LOG_LEVEL=debug
+
+      - N8N_BASIC_AUTH_ACTIVE=false
+
+      - N8N_HOST=${BASE_HOST}
+      - N8N_PATH=/n8n/
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=https
+      - WEBHOOK_URL=${BASE_URL}/n8n
+      
+      - NODE_ENV=production
+      
+      - GENERIC_TIMEZONE=Europe/Paris
+      - N8N_COMMUNITY_NODES_ENABLED=true
+      - NODE_FUNCTION_ALLOW_EXTERNAL=true
+
+      - DB_TYPE=postgresdb
+      - DB_POSTGRESDB_DATABASE=postgres
+      - DB_POSTGRESDB_HOST=supabase-db
+      - DB_POSTGRESDB_PORT=5432
+      - DB_POSTGRESDB_USER=postgres
+      - DB_POSTGRESDB_PASSWORD=${POSTGRES_PASSWORD}
+      - DB_POSTGRESDB_SCHEMA=n8n
+
+      - N8N_AVAILABLE_ENV_VARS=DB_HOST,DB_USER,DB_PASSWORD,DB_URI,SERVICE_ROLE_KEY,SUPABASE_URL
+      
+      - DB_HOST=supabase-db
+      - DB_USER=supabase_admin
+      - DB_PASSWORD=${POSTGRES_PASSWORD}
+      - DB_URI=postgres://supabase_admin:${POSTGRES_PASSWORD}@supabase-db:5432/postgres
+
+      - SERVICE_ROLE_KEY=${SERVICE_ROLE_KEY}
+      - SUPABASE_URL=${BASE_URL}
+    volumes:
+      - n8n_data:/home/node/.n8n
+      - n8n_files:/files
+      - ../workspace:/files/workspace
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /tmp:/tmp
+
+volumes:
+  n8n_data:
+  n8n_files:

@@ -1,0 +1,9 @@
+INCLUDE _drop_policies.sql;
+INCLUDE _drop_triggers.sql;
+
+DROP TABLE IF EXISTS "groups" CASCADE;
+DROP TABLE IF EXISTS "assets" CASCADE;
+DROP TABLE IF EXISTS "devices" CASCADE;
+DROP TABLE IF EXISTS "members" CASCADE;
+
+DROP TYPE IF EXISTS member_role;

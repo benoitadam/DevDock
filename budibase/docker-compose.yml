@@ -1,0 +1,33 @@
+name: budibase
+
+services:
+
+  budibase:
+    restart: unless-stopped
+    image: budibase/budibase:latest
+    container_name: budibase
+    environment:
+      APPS_URL: https://budibase.prod.mediactil.com
+      # SERVER_TOP_LEVEL_PATH: /budibase
+      BB_ADMIN_USER_EMAIL: ${ADMIN_USERNAME}
+      BB_ADMIN_USER_PASSWORD: ${ADMIN_PASSWORD}
+      JWT_SECRET: ${BUDIBASE_JWT_SECRET}
+      MINIO_ACCESS_KEY: ${BUDIBASE_MINIO_ACCESS_KEY}
+      MINIO_SECRET_KEY: ${BUDIBASE_MINIO_SECRET_KEY}
+      REDIS_PASSWORD: ${BUDIBASE_REDIS_PASSWORD}
+      COUCHDB_USER: ${BUDIBASE_COUCHDB_USER}
+      COUCHDB_PASSWORD: ${BUDIBASE_COUCHDB_PASSWORD}
+      INTERNAL_API_KEY: ${BUDIBASE_INTERNAL_API_KEY}
+      # Options supplémentaires que vous pourriez envisager
+      # PLATFORM_URL: https://prod.mediactil.com/budibase
+      # WORKER_URL: https://prod.mediactil.com/budibase
+    volumes:
+      - budibase_data:/data
+
+networks:
+  default:
+    name: web
+    external: true
+
+volumes:
+  budibase_data:

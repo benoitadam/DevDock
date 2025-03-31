@@ -1,0 +1,30 @@
+name: code
+
+networks:
+  default:
+    name: web
+    external: true
+
+services:
+  code:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    container_name: code
+    restart: unless-stopped
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Paris
+      - PASSWORD=
+      - DEFAULT_WORKSPACE=/config/workspace
+      - SUPABASE_URL=${BASE_URL}
+      - SUPABASE_ANON_KEY=${ANON_KEY}
+      - SUPABASE_SERVICE_ROLE_KEY=${SERVICE_ROLE_KEY}
+    volumes:
+      - code_config:/config
+      - ../workspace:/config/workspace
+      # - ./install.sh:/etc/cont-init.d/99-install2
+
+volumes:
+  code_config:

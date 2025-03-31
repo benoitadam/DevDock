@@ -1,0 +1,132 @@
+{
+	email dev@mediactil.com
+	order replace after encode
+}
+
+pb.m4k.fr {
+	request_body {
+		max_size 10MB
+	}
+	reverse_proxy pocketbase:8080 {
+		header_up X-Forwarded-For {http.request.header.X-Forwarded-For}
+		header_up X-Real-IP {remote}
+		header_up Host {http.request.host}
+		transport http {
+			read_timeout 360s
+		}
+	}
+}
+
+fonts.m4k.fr {
+	handle /s/* {
+		reverse_proxy https://fonts.gstatic.com {
+			header_up Host {upstream_hostport}
+		}
+	}
+	handle_path /v1/* {
+		rewrite * /css2?family={path.0}:ital,wght@0,400;0,700;1,400;1,700&display=swap
+		reverse_proxy https://fonts.googleapis.com {
+			header_up Host {upstream_hostport}
+			header_up Accept-Encoding identity
+		}
+		replace https://fonts.gstatic.com/s https://fonts.m4k.fr/s
+	}
+	handle {
+		respond "fonts.m4k.fr v1.0.1 path:{path} query:{query} uri:{uri}"
+	}
+}
+
+prod.m4k.fr {
+	log {
+		level DEBUG
+	}
+
+	# Créer des règles spécifiques pour REST et auth avant la règle avec basic_auth
+	handle /rest/* {
+		reverse_proxy supabase-kong:8000
+	}
+	handle /api/* {
+		reverse_proxy supabase-kong:8000
+	}
+	handle /auth/* {
+		reverse_proxy supabase-kong:8000
+	}
+	handle_path / {
+		root * /srv/my-admin
+		file_server
+	}
+	handle_path /my-admin/* {
+		root * /srv/my-admin
+		file_server
+	}
+	
+	# Pour tous les autres chemins, garder l'authentification
+	handle {
+		basic_auth {
+			{ADMIN_USERNAME} {ADMIN_PASSWORD_HASHED}
+		}
+
+		handle_path /code/* {
+			reverse_proxy code:8443
+		}
+
+		handle_path /n8n/* {
+			reverse_proxy n8n:5678
+		}
+		
+		handle {
+			# Autorise les iframes
+			header -Content-Security-Policy
+			header +Content-Security-Policy "frame-ancestors *"
+			header -X-Frame-Options
+			header +X-Frame-Options "ALLOWALL"
+			reverse_proxy supabase-kong:8000
+		}
+	}
+}
+
+
+
+		# replace /project/* "<head>" "<head><script src='/inject/inject.js'></script>"
+		# reverse_proxy /project/* supabase-kong:8000 { header_up Accept-Encoding identity }
+
+	# # Authentication
+	# handle_path /keycloak* {
+	#     reverse_proxy keycloak:8080 {
+	#         header_up Host {host}
+	#         header_up X-Forwarded-For {remote_host}
+	#         header_up X-Forwarded-Proto {scheme}
+	#         header_up X-Forwarded-Host {host}
+	#         header_up X-Forwarded-Port {server_port}
+	#     }
+	# }
+
+	# reverse_proxy supabase-kong:8000
+
+	# root * /srv/inject
+	# file_server
+
+
+
+# v1.m4k.fr {
+#     handle_path /api/* {
+#     }
+#     handle_path /web/* {
+#     }
+# }
+
+# a.m4k.fr {
+# 	log {
+# 		level DEBUG
+# 	}
+
+# 	# reverse_proxy code:8443
+# }
+
+# budibase.prod.mediactil.com {
+# 	reverse_proxy budibase:80 {
+# 		header_up X-Forwarded-For {http.request.header.X-Forwarded-For}
+# 		header_up X-Real-IP {remote}
+# 		header_up Host {http.request.host}
+# 	}
+# }

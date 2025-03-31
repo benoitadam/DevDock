@@ -1,0 +1,28 @@
+# Ignorer tous les fichiers .env
+.env
+.env.*
+
+# Ignorer tous les dossiers _generated
+_generated/
+
+# Fichiers système
+.DS_Store
+Thumbs.db
+
+# Dossiers de dépendances courants
+node_modules/
+vendor/
+
+# Fichiers de logs
+*.log
+
+# Dossier de build
+dist/
+build/
+out/
+
+# Fichiers de cache
+.cache/
+.npm/
+.yarn/
+.pnpm-store/

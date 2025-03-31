@@ -1,0 +1,72 @@
+
+services:
+
+  studio:
+    environment:
+      SUPABASE_PUBLIC_URL: ${BASE_URL}/supabase
+      NEXT_PUBLIC_ENABLE_IFRAME_EMBED: true
+
+  storage:
+    volumes: null
+    environment:
+      STORAGE_BACKEND: s3
+      REGION: ${S3_REGION}
+      S3_ENDPOINT: ${S3_ENDPOINT}
+      S3_FORCE_PATH_STYLE: true
+      S3_USE_PATH_STYLE_ENDPOINT: true
+      AWS_ACCESS_KEY_ID: ${S3_ACCESS_KEY}
+      AWS_SECRET_ACCESS_KEY: ${S3_SECRET_KEY}
+      GLOBAL_S3_BUCKET: ${S3_BUCKET}
+      GLOBAL_S3_PROTOCOL: https
+      GLOBAL_S3_FORCE_PATH_STYLE: true
+      GLOBAL_S3_ENDPOINT: ${S3_ENDPOINT}
+      TENANT_ID: s
+      FILE_SIZE_LIMIT: 1073741824
+
+  kong:
+    ports: null
+    environment:
+      KONG_NGINX_PROXY_CLIENT_MAX_BODY_SIZE: 1024m
+      DASHBOARD_USERNAME: ${ADMIN_USERNAME}
+      DASHBOARD_PASSWORD: ${ADMIN_PASSWORD}
+
+  analytics:
+    ports: null
+
+  supavisor:
+    ports: null
+
+  imgproxy:
+    environment:
+      IMGPROXY_S3_ENDPOINT: ${S3_ENDPOINT}
+      IMGPROXY_S3_REGION: ${S3_REGION}
+      IMGPROXY_S3_ACCESS_KEY_ID: ${S3_ACCESS_KEY}
+      IMGPROXY_S3_SECRET_ACCESS_KEY: ${S3_SECRET_KEY}
+      IMGPROXY_S3_FORCE_PATH_STYLE: true
+    volumes: null
+
+  functions:
+    environment:
+      SUPABASE_URL: ${BASE_URL}
+    volumes:
+      - ../../workspace/functions:/home/deno/functions:Z
+      - ./volumes/functions/main:/home/deno/functions/main:Z
+
+  auth:
+    environment:
+      API_EXTERNAL_URL: ${BASE_URL}/api
+      GOTRUE_SITE_URL: ${BASE_URL}
+      # GOTRUE_URI_ALLOW_LIST: ${ADDITIONAL_REDIRECT_URLS}
+      # GOTRUE_MAILER_URLPATHS_INVITE: ${MAILER_URLPATHS_INVITE}
+      # GOTRUE_MAILER_URLPATHS_CONFIRMATION: ${MAILER_URLPATHS_CONFIRMATION}
+      # GOTRUE_MAILER_URLPATHS_RECOVERY: ${MAILER_URLPATHS_RECOVERY}
+      # GOTRUE_MAILER_URLPATHS_EMAIL_CHANGE: ${MAILER_URLPATHS_EMAIL_CHANGE}
+
+networks:
+  default:
+    name: web
+    external: true
+
+volumes:
+  db_config: {}
+  db_data: {}
