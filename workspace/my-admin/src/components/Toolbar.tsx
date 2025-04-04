@@ -1,12 +1,12 @@
-import { Css } from '../helpers/html';
+import { Css } from '@common/helpers/html';
 import budibaseLogo from '../assets/budibase.svg';
 import codeLogo from '../assets/code.svg';
 import n8nLogo from '../assets/n8n.svg';
 import supabaseLogo from '../assets/supabase.svg';
 import page$ from '../messages/page$';
-import useMsg from '../hooks/useMsg';
+import useMsg from '@common/hooks/useMsg';
 import { useState } from 'react';
-import useCss from '@/hooks/useCss';
+import useCss from '@common/hooks/useCss';
 
 const css: Css = {
     '&': {
@@ -83,7 +83,7 @@ const Toolbar = () => {
             <Tool icon={codeLogo} page="code" url="/code/" />
             <Tool icon={n8nLogo} page="n8n" url="/n8n/" />
             <Tool icon={supabaseLogo} page="supabase" url="/project/default" />
-            <Tool icon={budibaseLogo} page="assets" />
+            <Tool icon={budibaseLogo} page="admin" />
         </div>
     )
 }

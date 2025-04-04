@@ -1,5 +1,5 @@
-import Msg from "../helpers/Msg";
+import Msg from "@common/helpers/Msg";
 
-const page$ = new Msg('');
+const page$ = new Msg('admin');
 
 export default page$

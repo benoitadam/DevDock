@@ -1,8 +1,8 @@
-import { Css } from '../helpers/html'
-import useMsg from '../hooks/useMsg'
+import { Css } from '@common/helpers/html'
+import useMsg from '@common/hooks/useMsg'
 import page$ from '../messages/page$'
-import useAnimState from '../hooks/useAnimState'
-import useCss from '@/hooks/useCss'
+import useAnimState from '@common/hooks/useAnimState'
+import useCss from '@common/hooks/useCss'
 import { ReactNode } from 'react'
 
 const pageCss: Css = {

@@ -1,12 +1,12 @@
 import { supabase } from '@/api'
-import { setCss } from '../helpers/html'
-import AssetsPage from './GroupsPage'
+import { setCss } from '@common/helpers/html'
+import AdminPage from './AdminPage'
 import IframePage from './IframePage'
 import Toolbar from './Toolbar'
-import usePromise from '@/hooks/usePromise'
+import usePromise from '@common/hooks/usePromise'
 import { Auth } from '@supabase/auth-ui-react'
 import { ThemeSupa } from '@supabase/auth-ui-shared'
-import { flexCenter } from '@/helpers/flexBox'
+import { flexCenter } from '@common/helpers/flexBox'
 
 setCss('App', {
   '&': {
@@ -49,7 +49,7 @@ function App() {
       <IframePage name="supabase" src="/project/default" />
       <IframePage name="code" src="/code/" />
       <IframePage name="n8n" src="/n8n/" />
-      <AssetsPage />
+      <AdminPage />
       <Toolbar />
     </div>
   )

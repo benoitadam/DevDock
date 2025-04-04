@@ -26,3 +26,6 @@ out/
 .npm/
 .yarn/
 .pnpm-store/
+
+# Workspace
+workspace/common

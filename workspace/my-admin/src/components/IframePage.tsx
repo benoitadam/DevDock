@@ -1,4 +1,4 @@
-import { Css } from '../helpers/html'
+import { Css } from '@common/helpers/html'
 import Page from './Page'
 
 const css: Css = {

@@ -1,5 +1,3 @@
-BEGIN;
-
 SELECT *
 FROM information_schema.tables
 WHERE table_schema = 'public';
@@ -31,5 +29,3 @@ WHERE table_schema = 'public';
 --       WHERE table_schema = 'public' AND table_type = 'BASE TABLE'
 --     )
 --   ) AS schema_json;
-
-;COMMIT;

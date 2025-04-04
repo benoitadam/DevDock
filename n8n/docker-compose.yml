@@ -39,7 +39,7 @@ services:
       - DB_POSTGRESDB_PASSWORD=${POSTGRES_PASSWORD}
       - DB_POSTGRESDB_SCHEMA=n8n
 
-      - N8N_AVAILABLE_ENV_VARS=DB_HOST,DB_USER,DB_PASSWORD,DB_URI,SERVICE_ROLE_KEY,SUPABASE_URL
+      - N8N_AVAILABLE_ENV_VARS=DB_HOST,DB_USER,DB_PASSWORD,DB_URI,SERVICE_ROLE_KEY,SUPABASE_URL,SUPABASE_ANON_KEY
       
       - DB_HOST=supabase-db
       - DB_USER=supabase_admin
@@ -48,6 +48,8 @@ services:
 
       - SERVICE_ROLE_KEY=${SERVICE_ROLE_KEY}
       - SUPABASE_URL=${BASE_URL}
+      - SUPABASE_ANON_KEY=${ANON_KEY}
+
     volumes:
       - n8n_data:/home/node/.n8n
       - n8n_files:/files
